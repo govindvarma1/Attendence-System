@@ -45,7 +45,7 @@ module.exports.Register = async (req, res, next) => {
             password: hashedPassword,
         });
         delete newUser.password;
-        return res.status(200).json({ status: "success", msg: "user created sucessfully", newUser });
+        return res.status(200).json({ status: "success", msg: "user created sucessfully", user: newUser });
     } catch (ex) {
         next(ex);
     }
@@ -54,7 +54,7 @@ module.exports.Register = async (req, res, next) => {
 module.exports.AddImage = async (req, res, next) => {
     try {
         const id = req.body._id;
-        const base64Data = process.env.STRING;
+        const base64Data = req.body.image;
         const buffer = Buffer.from(base64Data, "base64");
 
         const file = bucket.file(`${dateParser()}.png`);

@@ -1,11 +1,29 @@
 import React, { useState } from "react";
 import { WebcamCapture } from "../common/ImageCapture";
 import styled from "styled-components";
+import { imageSetRoute } from "../Utils/APIRoutes";
 
 export default function ImageSet() {
   const [image, setImage] = useState(undefined);
   function ReTake() {
     setImage(undefined);
+  }
+
+  async function SaveImage() {
+    try {
+      const user = localStorage.getItem("user");
+      const response = await fetch(imageSetRoute, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ image: image, _id: user._id }),
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -16,7 +34,7 @@ export default function ImageSet() {
           <img src={image} />
           <div className="buttons">
             <button onClick={ReTake}>Retake</button>
-            <button onClick={ReTake}>Save</button>
+            <button onClick={SaveImage}>Save</button>
           </div>
         </div>
       ) : null}

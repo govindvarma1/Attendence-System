@@ -53,6 +53,8 @@ export default function Register() {
         const data = await response.json();
         if (response.status >= 400 && response.status < 500) {
           toast.error(data.msg, ToastOptions);
+        } else {
+          localStorage.setItem("user", JSON.stringify(data.user));
         }
         console.log(data);
       }
