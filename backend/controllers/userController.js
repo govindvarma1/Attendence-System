@@ -54,7 +54,7 @@ module.exports.Register = async (req, res, next) => {
 module.exports.AddImage = async (req, res, next) => {
     try {
         const id = req.body._id;
-        const base64Data = req.body.image;
+        const base64Data = req.body.image.substring(23);
         const buffer = Buffer.from(base64Data, "base64");
 
         const file = bucket.file(`${dateParser()}.png`);
@@ -63,8 +63,6 @@ module.exports.AddImage = async (req, res, next) => {
                 contentType: "image/png",
             },
         });
-
-        console.log(dateParser())
 
         stream.on("error", (error) => {
             console.error("Error uploading file:", error);
@@ -75,7 +73,7 @@ module.exports.AddImage = async (req, res, next) => {
             console.log("File uploaded successfully.");
             const user = await User.findByIdAndUpdate(id, { isImageTaken: true });
             console.log(user)
-            return res.status(200).json({ msg: "success", string: process.env.STRING })
+            return res.status(200).json({ msg: "success", string: base64Data })
         });
 
         stream.end(buffer);
