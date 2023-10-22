@@ -11,13 +11,14 @@ export default function ImageSet() {
 
   async function SaveImage() {
     try {
-      const user = localStorage.getItem("user");
+      const user = JSON.parse(localStorage.getItem("user"));
+      console.log(user);
       const response = await fetch(imageSetRoute, {
         method: "POST",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({ image: image, _id: user._id }),
+        body: JSON.stringify({ image: image, userId: user._id }),
       });
       const data = await response.json();
       console.log(data);

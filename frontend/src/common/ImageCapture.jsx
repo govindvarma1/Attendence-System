@@ -12,7 +12,6 @@ export function WebcamCapture({ height, width, setImage }) {
 
   const capture = useCallback(() => {
     setImage(webcamRef.current.getScreenshot());
-    console.log(webcamRef.current.getScreenshot());
   }, [webcamRef]);
 
   return (

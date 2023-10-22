@@ -19,6 +19,10 @@ const userSchema = mongoose.Schema({
     isImageTaken: {
         type: Boolean,
         default: false,
+    },
+    userImage: {
+        type: String,
+        default: "",
     }
 })
 

@@ -25,6 +25,7 @@ module.exports.Login = async (req, res, next) => {
         if (!isPasswordValid) {
             return res.status(401).json({ status: "success", msg: "incorrect username or password" });
         }
+        delete user._doc.password
         return res.status(200).json({ status: "success", msg: "login successfull", user: user });
 
     } catch (ex) {
@@ -44,7 +45,7 @@ module.exports.Register = async (req, res, next) => {
             email: email,
             password: hashedPassword,
         });
-        delete newUser.password;
+        delete newUser._doc.password;
         return res.status(200).json({ status: "success", msg: "user created sucessfully", user: newUser });
     } catch (ex) {
         next(ex);
@@ -53,7 +54,8 @@ module.exports.Register = async (req, res, next) => {
 
 module.exports.AddImage = async (req, res, next) => {
     try {
-        const id = req.body._id;
+        const id = req.body.userId;
+        console.log(id)
         const base64Data = req.body.image.substring(23);
         const buffer = Buffer.from(base64Data, "base64");
 
@@ -63,19 +65,20 @@ module.exports.AddImage = async (req, res, next) => {
                 contentType: "image/png",
             },
         });
-
         stream.on("error", (error) => {
             console.error("Error uploading file:", error);
-            return res.status(400).json({ msg: "failure", string: base64Data })
+            return res.status(400).json({ msg: "failure" })
         });
-
         stream.on("finish", async () => {
             console.log("File uploaded successfully.");
-            const user = await User.findByIdAndUpdate(id, { isImageTaken: true });
-            console.log(user)
-            return res.status(200).json({ msg: "success", string: base64Data })
+            const image = `https://firebasestorage.googleapis.com/v0/b/${process.env.STORAGEBUCKET}/o/${dateParser()}.png?alt=media&token=${process.env.ACCESS_TOKEN}`
+            console.log(image);
+            await User.findByIdAndUpdate(id, { isImageTaken: true, userImage: image });
+            const updatedUser = await User.findById(id);
+            delete updatedUser._doc.password;
+            delete updatedUser._doc.userImage;
+            return res.status(200).json({ msg: "success", user: updatedUser._doc })
         });
-
         stream.end(buffer);
     } catch (ex) {
         next(ex);
