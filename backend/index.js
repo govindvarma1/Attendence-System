@@ -20,6 +20,10 @@ async function dbConnect() {
 }
 dbConnect();
 
+app.get("/", (req, res) => {
+    res.send({ msg: "Welcome, you are on home page" })
+})
+
 //routes
 app.use("/api/auth", userRoutes);
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import logo from "../Assets/Logo.png";
 import TextField from "@mui/material/TextField";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerRoute } from "../Utils/APIRoutes";
+import { isLogin } from "../common/Helpers";
 
 export default function Register() {
   const [state, setState] = useState({
@@ -13,6 +14,7 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+  const [show, setShow] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const ToastOptions = {
     position: "bottom-right",
@@ -23,6 +25,18 @@ export default function Register() {
   };
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function Check() {
+      const result = await isLogin();
+      if (result === true) {
+        navigate("/");
+      } else {
+        setShow(true);
+      }
+    }
+    Check();
+  }, []);
 
   function handleClickShowPassword() {
     setShowPassword((show) => !show);
@@ -55,6 +69,7 @@ export default function Register() {
           toast.error(data.msg, ToastOptions);
         } else {
           localStorage.setItem("user", JSON.stringify(data.user));
+          navigate("/");
         }
         console.log(data);
       }
@@ -88,67 +103,71 @@ export default function Register() {
   }
 
   return (
-    <LoginForm>
-      <div className="main">
-        <img className="logo" src={logo} alt="logo"></img>
-        <div className="text-fields">
-          <TextField
-            label="email"
-            name="email"
-            value={state.email}
-            onChange={handleState}
-            size="small"
-            variant="outlined"
-          />
-          <TextField
-            label="password"
-            name="password"
-            value={state.password}
-            onChange={handleState}
-            type={showPassword ? "text" : "password"}
-            size="small"
-            variant="outlined"
-          />
-          <TextField
-            label="Confirm Password"
-            name="confirmPassword"
-            value={state.confirmPassword}
-            onChange={handleState}
-            type={showPassword ? "text" : "password"}
-            size="small"
-            variant="outlined"
-          />
-          <div className="show-password">
-            <input
-              type="checkbox"
-              name="showPassword"
-              checked={showPassword === true ? true : false}
-              onChange={handleClickShowPassword}
-            />
-            <p>show password</p>
+    <>
+      {show === true && (
+        <LoginForm>
+          <div className="main">
+            <img className="logo" src={logo} alt="logo"></img>
+            <div className="text-fields">
+              <TextField
+                label="email"
+                name="email"
+                value={state.email}
+                onChange={handleState}
+                size="small"
+                variant="outlined"
+              />
+              <TextField
+                label="password"
+                name="password"
+                value={state.password}
+                onChange={handleState}
+                type={showPassword ? "text" : "password"}
+                size="small"
+                variant="outlined"
+              />
+              <TextField
+                label="Confirm Password"
+                name="confirmPassword"
+                value={state.confirmPassword}
+                onChange={handleState}
+                type={showPassword ? "text" : "password"}
+                size="small"
+                variant="outlined"
+              />
+              <div className="show-password">
+                <input
+                  type="checkbox"
+                  name="showPassword"
+                  checked={showPassword === true ? true : false}
+                  onChange={handleClickShowPassword}
+                />
+                <p>show password</p>
+              </div>
+              <button className="login-button" onClick={handleSignIn}>
+                SignUp
+              </button>
+            </div>
+            <p>or signup using</p>
+            <div className="google-login" onClick={handleGoogleSignIn}>
+              <img
+                className="google-logo"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png"
+                alt="google logo"
+              />
+              <p className="google-text">SignUp with google</p>
+            </div>
+            <p>
+              already have an account?
+              <a className="redirect" onClick={handleNavigate}>
+                SignIn
+              </a>
+            </p>
           </div>
-          <button className="login-button" onClick={handleSignIn}>
-            SignUp
-          </button>
-        </div>
-        <p>or signup using</p>
-        <div className="google-login" onClick={handleGoogleSignIn}>
-          <img
-            className="google-logo"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png"
-            alt="google logo"
-          />
-          <p className="google-text">SignUp with google</p>
-        </div>
-        <p>
-          already have an account?
-          <a className="redirect" onClick={handleNavigate}>
-            SignIn
-          </a>
-        </p>
-      </div>
-      <ToastContainer />
-    </LoginForm>
+          <ToastContainer />
+        </LoginForm>
+      )}
+    </>
   );
 }
 

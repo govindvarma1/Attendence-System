@@ -85,3 +85,21 @@ module.exports.AddImage = async (req, res, next) => {
     }
 }
 
+module.exports.isLogin = async (req, res, next) => {
+    try {
+
+        if (req.body.user === null) {
+            return res.status(404).json({ status: "success", msg: "redirect to login" });
+        }
+        const user = await User.findById(req.body.user._id);
+        console.log(user);
+        if (user === null) {
+            return res.status(404).json({ status: "success", msg: "redirect to login" });
+        } else {
+            return res.status(200).json({ status: "success" })
+        }
+    } catch (ex) {
+        next(ex);
+    }
+}
+
