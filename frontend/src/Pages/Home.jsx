@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { isLogin } from "../common/Helpers";
+import NavBar from "../Components/NavBar";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <NavBar />
     </div>
   );
 }
