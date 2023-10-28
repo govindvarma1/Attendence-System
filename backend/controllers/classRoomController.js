@@ -1,12 +1,21 @@
 const ClassRoom = require("../models/classRoomModal");
+const { uuidGenerator } = require("../utils/UUIDGenerator");
 
 module.exports.CreateClassRoom = async (req, res, next) => {
     try {
+        const { _id, email } = req.body.user;
+        let code = uuidGenerator(8);
         const newClassRoom = await ClassRoom.create({
+            code: code,
             name: "Test Classroom",
             subject: "Test Subject",
             description: "This is a test classroom",
-            teachers: [],
+            teachers: [
+                {
+                    id: _id,
+                    name: email,
+                }
+            ],
             students: [],
             posts: [],
         });

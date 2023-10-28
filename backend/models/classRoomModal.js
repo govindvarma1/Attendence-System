@@ -30,6 +30,10 @@ const postsSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const classRoomSchema = mongoose.Schema({
+    code: {
+        type: String,
+        unique: true,
+    },
     name: {
         type: String,
         required: true,
