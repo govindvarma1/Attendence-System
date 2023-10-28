@@ -19,7 +19,7 @@ module.exports.CreateClassRoom = async (req, res, next) => {
             students: [],
             posts: [],
         });
-        res.status(200).send({ msg: "class room created sucessfully", ClassRoom: newClassRoom });
+        return res.status(200).send({ msg: "class room created sucessfully", ClassRoom: newClassRoom });
     } catch (ex) {
         next(ex);
     }
@@ -27,7 +27,14 @@ module.exports.CreateClassRoom = async (req, res, next) => {
 
 module.exports.JoinClassRoom = async (req, res, next) => {
     try {
-        res.status(200).send({ msg: "under work" });
+        const { _id, email } = req.body.user;
+        const code = req.body.ClassRoomCode;
+        const availableClassRoom = await ClassRoom.find({ code: code });
+        if (availableClassRoom === null) {
+            return res.status(400).send({ msg: "the classroom does't exist" });
+        }
+        await ClassRoom.findOneAndUpdate({ code: code }, { $push: { students: { id: _id, name: email } } });
+        return res.status(200).send({ msg: "success" });
     } catch (ex) {
         next(ex);
     }
