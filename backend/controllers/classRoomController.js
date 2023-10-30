@@ -39,3 +39,26 @@ module.exports.JoinClassRoom = async (req, res, next) => {
         next(ex);
     }
 }
+
+module.exports.addPost = async (req, res, next) => {
+    try {
+        const { email, ClassRoomId, message } = req.body;
+        const availableClassRoom = await ClassRoom.findById(ClassRoomId);
+        if (availableClassRoom === null) {
+            return res.status(400).send({ msg: "classroom doesn't exist" });
+        }
+        await ClassRoom.findByIdAndUpdate(ClassRoomId, { $push: { posts: { author: email, message: message } } });
+        return res.status(200).send({ msg: "new post added" });
+    } catch (ex) {
+        next(ex);
+    }
+}
+
+module.exports.deletePost = async (req, res, next) => {
+    try {
+        const { classRoomId, postId } = req.body;
+        res.status(200).send({ msg: "under work" });
+    } catch (ex) {
+        next(ex);
+    }
+}
