@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 const userRoutes = require("./routes/userRoutes")
+const ClassRoomRoutes = require("./routes/classRoomRoutes");
 require("dotenv").config();
 
 app.use(cors());
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 
 //routes
 app.use("/api/auth", userRoutes);
+app.use("/api/classroom/", ClassRoomRoutes)
 
 app.listen(process.env.PORT, () => {
     console.log(`the server is running on port ${process.env.PORT}`);
