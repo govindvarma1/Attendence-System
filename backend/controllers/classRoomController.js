@@ -33,8 +33,13 @@ module.exports.JoinClassRoom = async (req, res, next) => {
         if (availableClassRoom === null) {
             return res.status(400).send({ msg: "the classroom does't exist" });
         }
-        await ClassRoom.findOneAndUpdate({ code: code }, { $push: { students: { id: _id, name: email } } });
-        return res.status(200).send({ msg: "success" });
+        const userExists = await ClassRoom.find({ "students._id": "653d2ebff9dd8f0a2c674c3b" });
+        if (userExists === null) {
+            await ClassRoom.findOneAndUpdate({ code: code }, { $push: { students: { _id: _id, name: email } } });
+            console.log(userExists);
+            return res.status(200).send({ msg: "success" });
+        }
+        return res.status(200).send({ msg: "user already in classroom" });
     } catch (ex) {
         next(ex);
     }
