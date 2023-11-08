@@ -27,6 +27,10 @@ const postsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    message: {
+        type: String,
+        required: true,
+    }
 }, { timestamps: true })
 
 const classRoomSchema = mongoose.Schema({
