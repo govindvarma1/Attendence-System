@@ -1,5 +1,21 @@
 const mongoose = require("mongoose");
 
+const classroomSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    subject: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true,
+    }
+
+})
+
 const userSchema = mongoose.Schema({
     email: {
         type: String,
@@ -23,7 +39,10 @@ const userSchema = mongoose.Schema({
     userImage: {
         type: String,
         default: "",
-    }
+    },
+    classrooms: [
+        classroomSchema
+    ]
 })
 
 module.exports = mongoose.model("users", userSchema);

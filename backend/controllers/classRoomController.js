@@ -1,15 +1,17 @@
 const ClassRoom = require("../models/classRoomModal");
+const User = require("../models/userModal");
 const { uuidGenerator } = require("../utils/UUIDGenerator");
 
 module.exports.CreateClassRoom = async (req, res, next) => {
     try {
         const { _id, email } = req.body.user;
+        const { name, subject, description } = req.body.details;
         let code = uuidGenerator(8);
         const newClassRoom = await ClassRoom.create({
             code: code,
-            name: "Test Classroom",
-            subject: "Test Subject",
-            description: "This is a test classroom",
+            name: name,
+            subject: subject,
+            description: description,
             teachers: [
                 {
                     id: _id,
@@ -19,6 +21,7 @@ module.exports.CreateClassRoom = async (req, res, next) => {
             students: [],
             posts: [],
         });
+        await User.findByIdAndUpdate(_id, { $push: { classrooms: { _id: newClassRoom._id, name: name, subject: subject, description: description } } });
         return res.status(200).send({ msg: "class room created sucessfully", ClassRoom: newClassRoom });
     } catch (ex) {
         next(ex);
@@ -33,9 +36,10 @@ module.exports.JoinClassRoom = async (req, res, next) => {
         if (availableClassRoom === null) {
             return res.status(400).send({ msg: "the classroom does't exist" });
         }
-        const userExists = await ClassRoom.find({ "students._id": "653d2ebff9dd8f0a2c674c3b" });
+        const userExists = await ClassRoom.findOne({ "students._id": _id });
         if (userExists === null) {
             await ClassRoom.findOneAndUpdate({ code: code }, { $push: { students: { _id: _id, name: email } } });
+            await User.findOneAndUpdate({ _id: _id }, { $push: { classrooms: { _id: availableClassRoom._id, name: availableClassRoom.name, subject: availableClassRoom.subject, description: availableClassRoom.description } } });
             console.log(userExists);
             return res.status(200).send({ msg: "success" });
         }
