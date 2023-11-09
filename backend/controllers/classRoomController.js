@@ -67,3 +67,17 @@ module.exports.deletePost = async (req, res, next) => {
         next(ex);
     }
 }
+
+module.exports.fetchPeople = async (req, res, next) => {
+    try {
+        const { ClassRoomId } = req.body;
+        const availableClassRoom = await ClassRoom.findById(ClassRoomId);
+        if (availableClassRoom === null) {
+            return res.status(200).send({ msg: "classroom doesn't exist" });
+        }
+        const { teachers, students } = availableClassRoom;
+        return res.status(200).send({ msg: "success", teachers: teachers, students: students });
+    } catch (ex) {
+        next(ex);
+    }
+}
