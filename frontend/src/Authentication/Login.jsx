@@ -14,16 +14,6 @@ export default function Login() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function Check() {
-      const result = await isLogin();
-      if (result === true) {
-        navigate("/");
-      }
-    }
-    Check();
-  }, []);
-
   const ToastOptions = {
     position: "bottom-right",
     autoClose: 5000,
@@ -31,6 +21,18 @@ export default function Login() {
     theme: "dark",
     draggable: true,
   };
+
+  useEffect(() => {
+    async function Check() {
+      const result = await isLogin();
+      if (result === true) {
+        navigate("/");
+      } else {
+        setShow(true);
+      }
+    }
+    Check();
+  }, []);
 
   function handleClickShowPassword() {
     setShowPassword((show) => !show);

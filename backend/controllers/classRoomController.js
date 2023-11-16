@@ -32,7 +32,7 @@ module.exports.JoinClassRoom = async (req, res, next) => {
     try {
         const { _id, email } = req.body.user;
         const code = req.body.ClassRoomCode;
-        const availableClassRoom = await ClassRoom.find({ code: code });
+        const availableClassRoom = await ClassRoom.findOne({ code: code });
         if (availableClassRoom === null) {
             return res.status(400).send({ msg: "the classroom does't exist" });
         }
@@ -44,6 +44,20 @@ module.exports.JoinClassRoom = async (req, res, next) => {
             return res.status(200).send({ msg: "success" });
         }
         return res.status(200).send({ msg: "user already in classroom" });
+    } catch (ex) {
+        next(ex);
+    }
+}
+
+module.exports.OpenClassRoom = async (req, res, next) => {
+    try {
+        const { ClassRoomId, userId } = req.body;
+        console.log(ClassRoomId);
+        const availableClassRoom = await ClassRoom.findById(ClassRoomId);
+        if (availableClassRoom === null) {
+            return res.status(404).send({ msg: "the required classroom doesn't exist" });
+        }
+        return res.status(200).send({ msg: "sucess", classroom: availableClassRoom });
     } catch (ex) {
         next(ex);
     }
