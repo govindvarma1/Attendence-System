@@ -94,7 +94,11 @@ module.exports.fetchPeople = async (req, res, next) => {
             return res.status(200).send({ msg: "classroom doesn't exist" });
         }
         const { teachers, students } = availableClassRoom;
-        return res.status(200).send({ msg: "success", teachers: teachers, students: students });
+        return res.status(200).send({
+            msg: "success", people: {
+                teachers: teachers, students: students
+            }
+        });
     } catch (ex) {
         next(ex);
     }

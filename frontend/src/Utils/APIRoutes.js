@@ -10,4 +10,4 @@ export const isLoginRoute = `${host}/api/auth/islogin`
 export const createClassRoom = `${host}/api/classroom/create`
 export const joinClassRoom = `${host}/api/classroom/join`
 export const openClassRoom = `${host}/api/classroom/open`
-export const fetchPeople = `${host}/api/classroom/fetchpeople`
+export const fetchPeopleRoute = `${host}/api/classroom/fetchpeople`
