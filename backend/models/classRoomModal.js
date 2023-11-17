@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const teacherSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true,
-    },
     name: {
         type: String,
         required: true,
@@ -12,10 +8,6 @@ const teacherSchema = new mongoose.Schema({
 })
 
 const studentSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true,
-    },
     name: {
         type: String,
         required: true,
