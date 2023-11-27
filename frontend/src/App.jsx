@@ -5,11 +5,13 @@ import Register from "./Authentication/Register";
 import ImageSet from "./Authentication/ImageSet";
 import Home from "./Pages/Home";
 import ClassRoom from "./Pages/ClassRoom";
+import NavBar from "./Components/NavBar";
 
 export default function App() {
   return (
     <>
       <BrowserRouter>
+        <NavBar />
         <Routes>
           <Route path="login" element={<Login />} />
           <Route path="/register" element={<Register />} />
