@@ -23,7 +23,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      <NavBar />
       <main className="flex flex-wrap justify-between px-20 py-5">
         {classrooms.map((classroom, ind) => (
           <ClassRoomCard key={ind} classroom={classroom} />

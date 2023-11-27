@@ -71,7 +71,6 @@ export default function ClassRoom() {
     <div>
       {classInfo !== undefined && (
         <>
-          <NavBar />
           <ClassRoomTopBar active={active} setActive={setActive} />
           {active === 0 && <ClassRoomPosts posts={classInfo.posts} />}
           {active === 2 && <ClassRoomPeople people={people} />}
